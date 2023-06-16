@@ -2,7 +2,7 @@
 
 This is my 2023 pinecone hackathon submission - see https://pinecone-hackathon.devpost.com/
 
-I'll keep the example repo below:
+I'll keep the example readme below for now:
 
 <p align="center">
   <a href="https://nextjs-fastapi-starter.vercel.app/">
