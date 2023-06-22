@@ -36,6 +36,8 @@ embed = OpenAIEmbeddings(
         openai_api_key=OPENAI_API_KEY
     )
 
+def hello():
+    print("hello world")
 
 def get_playlist_from_url(playlist_url):
 
@@ -168,8 +170,8 @@ def is_video_indexed(video_url):
         top_k=1,
         include_metadata=True
     )
-    print(video_id)
-    print(query_result)
+    # print(video_id)
+    # print(query_result)
     return len(query_result['matches']) > 0
 
 def index_video(video_url):
@@ -199,18 +201,18 @@ def search_transcript(query, video_url):
 
     similar_docs = docsearch.similarity_search_with_score(query)
     best_doc = similar_docs[-1][0]
-    seconds = best_doc.metadata["chunk_timestamp"]
+    total_seconds = best_doc.metadata["chunk_timestamp"]
 
     # parsing timestamp from url
-    def convert_seconds(seconds):
-        minutes, seconds = divmod(seconds, 60)
+    def convert_seconds(total_seconds):
+        minutes, seconds = divmod(total_seconds, 60)
         return int(minutes), int(seconds)
 
-    minutes, seconds = convert_seconds(seconds)
-    print(best_doc)
+    minutes, seconds = convert_seconds(total_seconds)
+    print("answer: ", best_doc)
     print(f"exact timestamp - {minutes}:{seconds}")
 
-    return f"{video_url}&t={seconds}"
+    return total_seconds
 
 # langchain_tutorial_url = "https://www.youtube.com/watch?v=jSP-gSEyVeI"
 
