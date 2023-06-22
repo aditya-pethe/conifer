@@ -1,7 +1,5 @@
 fastapi==0.95.2
 uvicorn[standard]
-
-# jupyter
 requests
 pandas
 youtube_transcript_api
@@ -10,3 +8,4 @@ openai
 langchain
 tiktoken
 faiss-cpu
+pinecone
