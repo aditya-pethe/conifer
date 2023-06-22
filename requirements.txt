@@ -8,4 +8,4 @@ openai
 langchain
 tiktoken
 faiss-cpu
-pinecone
+pinecone-client
