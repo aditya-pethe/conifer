@@ -190,7 +190,7 @@ def index_video(video_url):
     index.upsert(vectors=zip(ids,embeddings,metadatas))
 
 
-def search_transcript(query, video_url):
+def search_transcript(query, video_url, k=3):
 
     if not is_video_indexed(video_url):
         index_video(video_url)
@@ -198,8 +198,8 @@ def search_transcript(query, video_url):
     embeddings = OpenAIEmbeddings()
     docsearch = Pinecone.from_existing_index(PINECONE_INDEX, embeddings)
     
+    similar_docs = docsearch.similarity_search_with_score(query, k=k)
 
-    similar_docs = docsearch.similarity_search_with_score(query)
     best_doc = similar_docs[-1][0]
     total_seconds = best_doc.metadata["chunk_timestamp"]
 
@@ -209,14 +209,15 @@ def search_transcript(query, video_url):
         return int(minutes), int(seconds)
 
     minutes, seconds = convert_seconds(total_seconds)
-    print("answer: ", best_doc)
-    print(f"exact timestamp - {minutes}:{seconds}")
+    for s in similar_docs:
+        print(s)
+    # print(f"exact timestamp - {minutes}:{seconds}")
 
     return total_seconds
 
-# langchain_tutorial_url = "https://www.youtube.com/watch?v=jSP-gSEyVeI"
+langchain_tutorial_url = "https://www.youtube.com/watch?v=jSP-gSEyVeI"
 
-# search_transcript("How do you create a langchain agent?", langchain_tutorial_url)
+search_transcript("How do you create a langchain agent?", langchain_tutorial_url)
 
 # print(is_video_indexed(langchain_tutorial_url))
 
