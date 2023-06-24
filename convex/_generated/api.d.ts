@@ -10,6 +10,8 @@
  */
 
 import type { ApiFromModules } from "convex/server";
+import type * as tables from "../tables";
+import type * as users from "../users";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -19,4 +21,7 @@ import type { ApiFromModules } from "convex/server";
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-export declare const api: ApiFromModules<{}>;
+export declare const api: ApiFromModules<{
+  tables: typeof tables;
+  users: typeof users;
+}>;

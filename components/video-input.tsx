@@ -2,20 +2,41 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 type VideoInputProps = {
   setVideoUrl: React.Dispatch<React.SetStateAction<string>>;
+  setAddVideo:React.Dispatch<React.SetStateAction<Array<string>>>;
+  addVideo:Array<string>;
+
 };
 
-const VideoInput: React.FC<VideoInputProps> = ({ setVideoUrl }) => {
+const VideoInput: React.FC<VideoInputProps> = ({ setVideoUrl, setAddVideo, addVideo }) => {
   const [input, setInput] = useState<string>('');
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setInput(e.target.value);
   };
 
+  function getVideoId(url: string): string {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+  
+    if (match && match[2].length == 11) {
+      return match[2];
+    } else {
+      // URL does not seem to be a valid YouTube URL
+      throw new Error('Invalid YouTube URL');
+    }
+  }  
+
+  // add to list of videos in thumbnail, play and load into pinecone
   const onFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setVideoUrl(input);
+    const videoId = getVideoId(input);
+    if(!addVideo.includes(videoId)){
+      setVideoUrl(input);
+      setAddVideo(prevVideos => [...prevVideos, videoId]);
+    }
     setInput('');
   };
+  
 
   return (
     <div className="p-4 w-full max-w-[40%] mx-auto bg-black text-white rounded-b-xl shadow-md flex items-center space-x-4 border border-gray-700 border-2 border-t-0">
