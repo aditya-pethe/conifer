@@ -9,3 +9,5 @@ langchain
 tiktoken
 faiss-cpu
 pinecone-client
+fastapi_async_langchain
+bs4
