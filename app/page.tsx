@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from 'next/dynamic';
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import {api} from "../convex/_generated/api"
 import { useUser } from "@clerk/clerk-react";
 
@@ -16,21 +16,34 @@ import VideoSidebar from "@/components/video-sidebar";
 
 export default function Home() {
 
-  const startVideo = "https://www.youtube.com/watch?v=jSP-gSEyVeI"; // langchain tutorial - hardcoded for now
-
+  const startVideos = [
+    "733m6qBH-jI" // andrew ng lecture - career focused
+  ];
+  
   // Fetch initial list of video IDs
-  const videoObj = useQuery(api.tables.listVideos, {user_id:"1"});
+  const userId = useUser().user?.id;
+  const videoObj = useQuery(api.tables.listVideos, {user_id:userId!});
+  const addUser = useMutation(api.tables.addUser); // replace 'createUser' with your actual mutation name
+
   
   const [videoTimestamp, setVideoTimestamp] = useState(0);
-  const [videoUrl, setVideoUrl] = useState(startVideo);
+  const [videoUrl, setVideoUrl] = useState('');
   const [addVideo, setAddVideo] = useState<string[]>([]);
   const [userQuery, setUserQuery] = useState('');
 
+  console.log(videoObj)
+  
   useEffect(() => {
-    if (videoObj && videoObj.length > 0) {
-      setAddVideo(videoObj[0].video_ids);
+    if (videoObj && videoObj.length > 0 && Array.isArray(videoObj[0].video_ids)) {
+      const userVideoIds = videoObj[0].video_ids;
+      const combinedVideos = [...startVideos, ...userVideoIds];
+      setAddVideo(combinedVideos);
+    } else if (!videoObj && userId) {
+      addUser({ user_id: userId});
     }
-  }, [videoObj]);
+  }, [videoObj, userId, addUser]);
+  
+  
 
   const DynamicYouTubeEmbed = dynamic(
     () => import('../components/youtube-embed'),

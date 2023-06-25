@@ -60,13 +60,17 @@ def get_playlist_from_url(playlist_url):
     response = requests.get(url, params=params)
     return response.json()
 
-def get_video_from_url(video_url):
-
+def get_id_from_video(video_url):
     parsed_url = urllib.parse.urlparse(video_url)
     query_params = urllib.parse.parse_qs(parsed_url.query)
-    video_id = query_params["v"][0]
+    return query_params["v"][0]
 
-    return YouTubeTranscriptApi.get_transcript(video_id), video_id
+
+def get_video_from_url(video_url):
+
+    video_id = get_id_from_video(video_url)
+    return YouTubeTranscriptApi.get_transcript(video_id)
+
 
 def preprocess_transcript(transcript):
 
@@ -85,7 +89,7 @@ def preprocess_transcript(transcript):
 
 
 # chunk by an arbitrary chunk size - a potential improvement is using spacy or NLTK as the splitter
-def chunk_by_text(text, transcript, video_id, chunk_size = 500, chunk_overlap = 20):
+def chunk_by_text(text, transcript, video_id, chunk_size = 1000, chunk_overlap = 20):
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size = chunk_size,
@@ -157,10 +161,7 @@ def is_video_indexed(video_url):
     # I think this is dumb but apparently I need to a vector to query the DB
     test_vector = [0 for _ in range(1536)]
     # check that video is not already indexed
-    parsed_url = urllib.parse.urlparse(video_url)
-    query_params = urllib.parse.parse_qs(parsed_url.query)
-    video_id = query_params["v"][0]
-
+    video_id = get_id_from_video(video_url)
     index = pinecone.Index(PINECONE_INDEX)
     query_result = index.query(
         vector=test_vector,
@@ -176,8 +177,12 @@ def is_video_indexed(video_url):
 
 def index_video(video_url):
 
+    if is_video_indexed(video_url):
+        return
+
     # read video transcript, we need 2 versions: timestamped and formatted
-    transcript, video_id = get_video_from_url(video_url)
+    video_id = get_id_from_video(video_url)
+    transcript = get_video_from_url(video_url)
     timestamped_transcript, formatted_transcript = preprocess_transcript(transcript)    
 
     # chunk formatted transcript and add closest timestamps at the start of each chunk
@@ -192,13 +197,12 @@ def index_video(video_url):
 
 def search_transcript(query, video_url, k=3):
 
-    if not is_video_indexed(video_url):
-        index_video(video_url)
+    video_id = get_id_from_video(video_url)
 
     embeddings = OpenAIEmbeddings()
     docsearch = Pinecone.from_existing_index(PINECONE_INDEX, embeddings)
     
-    similar_docs = docsearch.similarity_search_with_score(query, k=k)
+    similar_docs = docsearch.similarity_search_with_score(query, k=k, filter={"video_id":video_id})
 
     best_doc = similar_docs[-1][0]
     total_seconds = best_doc.metadata["chunk_timestamp"]
