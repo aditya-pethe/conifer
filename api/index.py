@@ -7,12 +7,15 @@ from fastapi_async_langchain.responses import StreamingResponse
 from pydantic import BaseModel
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chat_models import ChatOpenAI
+from pytube import YouTube
+import requests
 
 from transcript_search import search_transcript, index_video
 from chatbot.chat_qa import Chatbot
 
 app = FastAPI()
 chatbot = Chatbot()
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 langchain_tutorial_url = "https://www.youtube.com/watch?v=jSP-gSEyVeI"
 
@@ -43,3 +46,19 @@ async def chat_qa(request:chatQuery):
 @app.post("/api/video")
 async def store_video(request:videoQuery):
     index_video(request.video_url)
+
+@app.get("/api/video_info")
+async def get_video_info(video_id: str):
+    response = requests.get(
+        'https://www.googleapis.com/youtube/v3/videos',
+        params={
+            'part': 'snippet',
+            'id': video_id,
+            'key': YOUTUBE_API_KEY,
+        },
+    )
+    data = response.json()
+    title = data['items'][0]['snippet']['title']
+    channelTitle = data['items'][0]['snippet']['channelTitle']  # get the channel title
+
+    return {"title": title, "channelTitle": channelTitle}  # return the channel title

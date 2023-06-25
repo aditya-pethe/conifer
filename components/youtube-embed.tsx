@@ -28,16 +28,23 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ embedUrl, start }) => {
   };
 
   return (
-    <div className="video-responsive flex justify-center border-2 border-gray-700">
-      <ReactPlayer
-        ref={playerRef}
-        url={embedUrl}
-        playing={playing}
-        width="853px"
-        height="480px"
-        controls={true}
-        onReady={onReady}
-      />
+    <div className="video-responsive flex justify-center items-center border-2 border-gray-700 h-[480px] w-[853px]">
+      <div className="flex justify-center items-center w-full h-full">
+        {embedUrl ? (
+          <ReactPlayer
+            ref={playerRef}
+            url={embedUrl}
+            playing={playing}
+            width="100%"
+            height="100%"
+            controls={true}
+            onReady={onReady}
+          />
+        ) : (
+          <div className="bg-black w-[50%] rounded-lg shadow-lg text-center">
+            <p className="text-xl text-white">Welcome to conifer search! To get started, select a video and ask questions below</p>
+          </div>        )}
+      </div>
     </div>
   );
 };

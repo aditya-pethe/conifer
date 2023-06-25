@@ -45,6 +45,28 @@ export const addVideo = mutation(async ({ db }, { user_id, video_id }:{user_id: 
   // ...
 });
 
+// delete a video from a users index
+export const deleteVideo = mutation(async ({ db }, { user_id, video_id }:{user_id: string, video_id:string}) => {
+  // First, get the user's current list of video ids
+  const user = await db.query("coniferUserTable")
+  .filter(q => q.eq(q.field("user_id"), user_id))
+  .collect();
+
+  const uqUser = user[0];
+
+  if (user) {
+    // ignore target video id
+    const updatedVideoIds = uqUser.video_ids.filter((id: string) => id !== video_id);
+
+    // Patch the user's document with the new list of video ids
+    await db.patch(uqUser._id, { video_ids: updatedVideoIds });
+  } else {
+    // If the user doesn't exist, create a new user with the given video id
+    await db.insert("coniferUserTable", { user_id, video_ids: [video_id] });
+  }
+// ...
+});
+
 // get list of videos from user id
 export const listVideos = query(async ({ db }, {user_id}:{user_id: string}) => {
     const videos = await db
