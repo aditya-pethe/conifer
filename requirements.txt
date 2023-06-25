@@ -11,3 +11,4 @@ faiss-cpu
 pinecone-client
 fastapi_async_langchain
 bs4
+pytube
