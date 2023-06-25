@@ -1,4 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import {api} from "../convex/_generated/api"
+import { useQuery, useMutation } from "convex/react";
+import { useUser } from '@clerk/nextjs';
 
 type VideoInputProps = {
   setVideoUrl: React.Dispatch<React.SetStateAction<string>>;
@@ -9,7 +12,8 @@ type VideoInputProps = {
 
 const VideoInput: React.FC<VideoInputProps> = ({ setVideoUrl, setAddVideo, addVideo }) => {
   const [input, setInput] = useState<string>('');
-
+  const insertVideo = useMutation(api.tables.addVideo); // replace 'createUser' with your actual mutation name
+  const userId = useUser().user?.id;
   const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setInput(e.target.value);
   };
@@ -27,12 +31,26 @@ const VideoInput: React.FC<VideoInputProps> = ({ setVideoUrl, setAddVideo, addVi
   }  
 
   // add to list of videos in thumbnail, play and load into pinecone
-  const onFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const onFormSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const videoId = getVideoId(input);
     if(!addVideo.includes(videoId)){
       setVideoUrl(input);
       setAddVideo(prevVideos => [...prevVideos, videoId]);
+      insertVideo({user_id:userId!, video_id:videoId})
+      // Make an API request to index the video in your Pinecone DB
+      const response = await fetch('/api/video', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ video_url: input })
+      });
+
+      // Check if the request was successful
+      if (!response.ok) {
+        console.error('Failed to index video:', response.statusText);
+      }
     }
     setInput('');
   };
