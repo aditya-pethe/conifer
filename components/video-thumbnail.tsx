@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image'
 
 type VideoThumbnailProps = {
   videoId: string;
@@ -27,7 +28,13 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoId, onDelete }) =>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      <img src={thumbnailUrl} alt="Video thumbnail" className="w-64 mr-4 ml-4 rounded-md" />
+      <Image
+        src={thumbnailUrl}
+        alt="Video thumbnail"
+        width={256} // you may need to adjust these values depending on your layout
+        height={144} // you may need to adjust these values depending on your layout
+        className="mr-4 ml-4 rounded-md"
+      />
       <div className="flex flex-col justify-between overflow-hidden h-32 w-64 mr-4">
         <h3 className="text-sm font-bold text-white overflow-ellipsis overflow-hidden">{videoTitle}</h3>
         <p className="text-xs text-gray-300 overflow-ellipsis whitespace-nowrap mt-[1em]">{videoChannel}</p>

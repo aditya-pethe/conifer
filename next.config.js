@@ -11,6 +11,9 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    domains: ['img.youtube.com'],
+  },
 };
 
 module.exports = nextConfig;
