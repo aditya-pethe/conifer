@@ -8,3 +8,4 @@ tiktoken
 pinecone-client
 fastapi_async_langchain
 bs4
+openai
