@@ -14,6 +14,10 @@ const nextConfig = {
   images: {
     domains: ['img.youtube.com'],
   },
+  experimental: {
+    legacyBrowsers: false,
+    outputFileTracingIgnores: ['**canvas**'],
+},
 };
 
 module.exports = nextConfig;
