@@ -4,11 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/api/:path*"
-            // : "/api/",
-            :"https://conifer-c31e80536881.herokuapp.com/api/:path*"
+        destination: "https://conifer-c31e80536881.herokuapp.com/api/:path*", // Update with your Heroku server URL
       },
     ];
   },
