@@ -6,15 +6,13 @@ from youtube_transcript_api.formatters import TextFormatter
 from dotenv import load_dotenv
 import urllib.parse
 import os
-import openai
+# import openai
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
 import pinecone
-import tiktoken
-import logging
 from uuid import uuid4
 
 load_dotenv()
@@ -25,7 +23,6 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_ENV = os.getenv("PINECONE_ENV")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
 
-openai.api_key = OPENAI_API_KEY
 pinecone.init(
     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
     environment=PINECONE_ENV,  # next to api key in console
