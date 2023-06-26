@@ -23,6 +23,10 @@ class chatQuery(BaseModel):
 class videoQuery(BaseModel):
     video_url:str
 
+@app.get("/")
+async def root():
+    return {"message":"conifer api"}
+
 @app.get("/api/python")
 def hello_world():
     return {"message": "Hello World"}
