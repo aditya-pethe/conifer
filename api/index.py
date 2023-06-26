@@ -7,7 +7,6 @@ from fastapi_async_langchain.responses import StreamingResponse
 from pydantic import BaseModel
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chat_models import ChatOpenAI
-from pytube import YouTube
 import requests
 
 from transcript_search import search_transcript, index_video

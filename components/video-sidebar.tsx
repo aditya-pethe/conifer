@@ -1,7 +1,6 @@
 import React from 'react';
 import { useUser } from "@clerk/clerk-react";
 import VideoThumbnail from "./video-thumbnail";
-import Thumbnail from "./video-thumbnail2"
 
 interface VideoSidebarProps {
   videoIds: Array<string>; // received from parent component

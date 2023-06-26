@@ -1,14 +1,14 @@
 fastapi==0.95.2
 uvicorn[standard]
 requests
-pandas
+# pandas
 youtube_transcript_api
 python-dotenv
 openai
 langchain
 tiktoken
-faiss-cpu
+# faiss-cpu
 pinecone-client
 fastapi_async_langchain
 bs4
-pytube
+# pytube
