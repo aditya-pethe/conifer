@@ -1,74 +1,49 @@
-# conepine
+## Inspiration
 
-This is my 2023 pinecone hackathon submission - see https://pinecone-hackathon.devpost.com/
+I'm tired of 2x-ing my lecture videos and tutorials. Lots of valuable information is in long form video content, but searching through this is a pain. Conifer allows users to search long form youtube videos in natural language. Students with hours of lecture videos, developers stuck in tutorial purgatory, and impatient movie watchers could all benefit from something like this.
 
-I'll keep the example readme below for now:
+## What it does
 
-<p align="center">
-  <a href="https://nextjs-fastapi-starter.vercel.app/">
-    <img src="https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png" height="96">
-    <h3 align="center">Next.js FastAPI Starter</h3>
-  </a>
-</p>
+Given a user query, Conifer navigates to the timestamp in the video that mostly closely matches the query, and produces gpt4 powered response to the query based on the video. 
 
-<p align="center">Simple Next.js boilerplate that uses <a href="https://fastapi.tiangolo.com/">FastAPI</a> as the API backend.</p>
+Key features
 
-<br/>
+- Adding / saving videos 
+- Searching a youtube timestamp
+- Chatbot QA based on query
 
-## Introduction
+## How we built it
 
-This is a hybrid Next.js + Python app that uses Next.js as the frontend and FastAPI as the API backend. One great use case of this is to write Next.js apps that use Python AI libraries on the backend.
+There are a few key technical components to Conifer:
+- **Video Ingestion:** Given a youtube video, get the timestamped transcript and "chunk" it, associating the closest timestamp with each of the chunks. Store these chunks and associated vector embeddings in pincone.
+- **Transcript Search:** Given a user query and video, search the pinecone index for the matching record and retrieve its timestamp. Then change the video player to the closest matching timestamp
+- **Chatbot QA:** Answer the user query given the relevant documents retrieved from pinecone - stream the response back using langchain / fastapi streaming
+- **Database / Accounts:** Handle adding / deleting videos, and setup a convex DB to support this. Each user can have a unique collection of videos etc. 
 
-## How It Works
+### Technologies
 
-The Python/FastAPI server is mapped into to Next.js app under `/api/`.
+Conifer is build with next.js and uses a fast api backend. In addition, users and accounts are managed with convex, while transcript vectors and search is powered by a pinecone db. Finally, authentication is handled by clerk. 
 
-This is implemented using [`next.config.js` rewrites](https://github.com/digitros/nextjs-fastapi/blob/main/next.config.js) to map any request to `/api/:path*` to the FastAPI API, which is hosted in the `/api` folder.
+## Challenges we ran into
 
-On localhost, the rewrite will be made to the `127.0.0.1:8000` port, which is where the FastAPI server is running.
+Many things were challenging - but a few notable things:
 
-In production, the FastAPI server is hosted as [Python serverless functions](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python) on Vercel.
+- streaming: I ended up using a convenient prebuilt library for this
+- convex: great DB, but learning it on the fly was difficult
 
-## Demo
+## Accomplishments that we're proud of
 
-https://nextjs-fastapi-starter.vercel.app/
+- MVP: It's usable in its current form, which is great
+- Accurate timestamp search: this is the key feature of the whole thing, and in general its pretty good. It uses a combination of metadata filtering and embedding search. Also, mapping timestamps -> data chunks wasn't simple at first.
+- Fast streaming: I think the streaming is great, fast completion time which is nice
 
-## Deploy Your Own
+## What we learned
 
-You can clone & deploy it to Vercel with one click:
+- Don't change your idea halfway through
+- Hacking with a bunch of new technologies is hard but fun!
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdigitros%2Fnextjs-fastapi%2Ftree%2Fmain)
+## What's next for Conifer
 
-## Developing Locally
-
-You can clone & create this repo with the following command
-
-```bash
-npx create-next-app nextjs-fastapi --example "https://github.com/digitros/nextjs-fastapi"
-```
-
-## Getting Started
-
-First, install the dependencies:
-
-```bash
-npm install
-# or
-yarn
-# or
-pnpm install
-```
-
-Then, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-The FastApi server will be running on [http://127.0.0.1:8000](http://127.0.0.1:8000) – feel free to change the port in `package.json` (you'll also need to update it in `next.config.js`).
+A couple features I would have liked to have added:
+- Search across all videos - could be toggled on and off
+- Chat history that maps to a video - right now there are no user chats, but their could be chats per vid
