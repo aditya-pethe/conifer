@@ -1,3 +1,8 @@
+
+<p align="center">
+  <img width="500" alt="Screen Shot 2023-06-25 at 9 11 15 PM" src="https://github.com/aditya-pethe/conifer/assets/50645024/53720b0b-ffaf-41e1-a30c-75b3061a9f5e">
+</p>
+
 ## Inspiration
 
 I'm tired of 2x-ing my lecture videos and tutorials. Lots of valuable information is in long form video content, but searching through this is a pain. Conifer allows users to search long form youtube videos in natural language. Students with hours of lecture videos, developers stuck in tutorial purgatory, and impatient movie watchers could all benefit from something like this.
