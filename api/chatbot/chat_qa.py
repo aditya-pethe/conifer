@@ -1,5 +1,4 @@
 from cmd import PROMPT
-import openai
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -33,13 +32,11 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
 PINECONE_ENV = os.getenv("PINECONE_ENV")
 
-openai.api_key = OPENAI_API_KEY
 pinecone.init(
     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
     environment=PINECONE_ENV,  # next to api key in console
     )
 
-openai.api_key = OPENAI_API_KEY
 embed = OpenAIEmbeddings(
         model='text-embedding-ada-002',
         openai_api_key=OPENAI_API_KEY
