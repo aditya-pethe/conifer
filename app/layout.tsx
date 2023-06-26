@@ -2,6 +2,8 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { dark } from '@clerk/themes';
+
 import ConvexClientProvider from "./ConvexClientProvider";
 
 
@@ -18,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider frontendApi={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">
         <body className={inter.className}>
         <ConvexClientProvider>{children}</ConvexClientProvider>

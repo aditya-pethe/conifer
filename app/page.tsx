@@ -11,16 +11,19 @@ import ChatUI from "@/components/chatbot-ui";
 import VideoInput from "@/components/video-input"
 import ChatOutput from "@/components/chat-output";
 import VideoSidebar from "@/components/video-sidebar";
+import SignInPage from '@/components/signin';
 
 
 
 export default function Home() {
 
+  const { user } = useUser();
+
   const startVideos = [
     "SqcY0GlETPk", // mosh react tutorial - good search
-    "HtI9easWtAA", // pinecone lecture - topical
-    "733m6qBH-jI", // andrew ng lecture - career focused
-    "zeJD6dqJ5lo" // 3blue1brown
+    // "HtI9easWtAA", // pinecone lecture - topical
+    // "733m6qBH-jI", // andrew ng lecture - career focused
+    // "zeJD6dqJ5lo" // 3blue1brown
   ];
   
   // Fetch initial list of video IDs
