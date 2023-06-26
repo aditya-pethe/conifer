@@ -1,12 +1,9 @@
-from operator import index
 import requests
-import pandas as pd
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from dotenv import load_dotenv
 import urllib.parse
 import os
-# import openai
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain.vectorstores import FAISS
