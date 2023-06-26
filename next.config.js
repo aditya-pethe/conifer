@@ -16,7 +16,16 @@ const nextConfig = {
   },
   experimental: {
     legacyBrowsers: false,
-    outputFileTracingIgnores: ['**canvas**'],
+    outputFileTracingIgnores: ['**canvas**','**swc/core**'],
+    outputFileTracingExcludes: {
+      '*': [
+        // prettier-ignore
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild/linux-x64',
+      ],
+    },
+  },
 },
 };
 
