@@ -20,10 +20,12 @@ export default function Home() {
   const { user } = useUser();
 
   const startVideos = [
+    "lHtX4t1ECVw", // spiderverse
     "SqcY0GlETPk", // mosh react tutorial - good search
     // "HtI9easWtAA", // pinecone lecture - topical
-    // "733m6qBH-jI", // andrew ng lecture - career focused
-    // "zeJD6dqJ5lo" // 3blue1brown
+    "733m6qBH-jI", // andrew ng lecture - career focused
+    // "zeJD6dqJ5lo", // 3blue1brown
+
   ];
   
   // Fetch initial list of video IDs
