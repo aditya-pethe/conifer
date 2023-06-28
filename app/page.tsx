@@ -24,7 +24,7 @@ export default function Home() {
     "SqcY0GlETPk", // mosh react tutorial - good search
     // "HtI9easWtAA", // pinecone lecture - topical
     "733m6qBH-jI", // andrew ng lecture - career focused
-    // "zeJD6dqJ5lo", // 3blue1brown
+    "zeJD6dqJ5lo", // 3blue1brown
 
   ];
   
